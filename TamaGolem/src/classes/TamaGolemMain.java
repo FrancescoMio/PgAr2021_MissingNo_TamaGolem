@@ -13,7 +13,7 @@ public class TamaGolemMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("GG");
+		Scontro scontro = new Scontro();
 	}
 
 }

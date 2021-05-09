@@ -13,23 +13,36 @@ import java.util.ArrayList;
  */
 public class GenerazioneEquilibrio {
 
-	public static int[][] gen(int numElementi, int numVita){
+
+	public static int[][] gen(int numElementi, int numVita) {
+		int [][] mat = {
+				{0,1,6,3,9,4,3,2,7,98},
+				{6,0,9,12,4,87,6,5,43,21},
+				{2,3,0,7,4,5,0,3,7,1},
+				{1,6,3,0,1,5,0,3,7,1},
+				{3,9,8,7,0,5,0,3,7,1},
+				{0,1,6,3,9,5,0,3,7,1},
+				{6,0,9,12,4,5,0,3,7,1},
+				{2,3,0,7,4,5,0,3,7,1},
+				{1,6,3,0,1,5,0,3,7,1},
+				{3,9,8,5,0,3,7,17,0,12}
+		};
+		return mat;
+		/*int [][] interazioni = new int[numElementi][numElementi];
 		
-		int [][] interazioni = new int[numElementi][numElementi];
-		
-		/*Pietra pietra = new Pietra(interazioni);
+		Pietra pietra = new Pietra(interazioni);
 		ArrayList<Pietra> pietre=new ArrayList<Pietra>();
 		
 		for (int i=0; i<numElementi; i++) {
 			pietre.add(pietra);
-		}*/
+		}
 		
 		ArrayList<Integer> danniRand=new ArrayList<Integer>(); //Assegnazione Danni Random
 		for (int i=0; i<numElementi;i++) {
 			int randomDanno=(int) Math.floor(Math.random()*(numVita)+1);
 			danniRand.add(randomDanno);
 		}
-		//System.out.println(danniRand);
+		System.out.println(danniRand);
 		
 		for (int i=0; i<numElementi; i++) { //Creazione Matrice
 			for (int j =0; j<numElementi; j++) {
@@ -58,10 +71,10 @@ public class GenerazioneEquilibrio {
 						return GenerazioneEquilibrio.stampaMatrice(interazioni, numElementi, numVita);
 						
 					}
-					/*if (posizionix.size()==numElementi-2) {
+					if (posizionix.size()==numElementi-2) {
 						posizionix.remove(posizionix.size()-1);
-					}*/
-					//System.out.println("posx " + posizionix);
+					}
+					System.out.println("posx " + posizionix);
 					for (int j=0; j<=(danniRand.get(i)-calcolaRiga(interazioni, i)); j++) {
 						//System.out.println(danniRand.get(i)-calcolaRiga(interazioni, i));
 						int posizioneRand=(int) Math.floor(Math.random()*(posizionix.size()));
@@ -80,7 +93,7 @@ public class GenerazioneEquilibrio {
 					}
 					
 				}
-				/*System.out.println("");
+				System.out.println("");
 				for (int b=0; b<numElementi; b++) {
 					for (int j =0; j<numElementi; j++) {
 						System.out.print(interazioni[b][j]+ " ");
@@ -88,11 +101,11 @@ public class GenerazioneEquilibrio {
 					}
 					System.out.println("");
 				
-				}*/
+				}
 				
 				
 				if (calcolaColonna(interazioni, i)<danniRand.get(i)) {
-					//System.out.println("somma colonna " +i+" " +calcolaColonna(interazioni, i));
+					System.out.println("somma colonna " +i+" " +calcolaColonna(interazioni, i));
 					ArrayList<Integer> posizioniy = new ArrayList<Integer>();	
 					for (int j=0; j<numElementi;j++) {
 						if ((j!=i)&&interazioni[j][i]==0&&interazioni[i][j]==0) {
@@ -111,10 +124,10 @@ public class GenerazioneEquilibrio {
 						return GenerazioneEquilibrio.stampaMatrice(interazioni, numElementi, numVita);
 						
 					}
-					/*if (posizioniy.size()==numElementi-2) {
+					if (posizioniy.size()==numElementi-2) {
 						posizioniy.remove(posizioniy.size()-1);
-					}*/
-					//System.out.println("posy "+posizioniy);
+					}
+					System.out.println("posy "+posizioniy);
 					for (int j=0; j<=(danniRand.get(i)-calcolaColonna(interazioni, i)); j++) {
 						int posizioneRand=(int) Math.floor(Math.random()*(posizioniy.size()));
 						int broken=0;
@@ -132,7 +145,7 @@ public class GenerazioneEquilibrio {
 					
 					
 				}
-				/*System.out.println("");
+				System.out.println("");
 				for (int b=0; b<numElementi; b++) {
 					for (int j =0; j<numElementi; j++) {
 						System.out.print(interazioni[b][j]+ " ");
@@ -140,7 +153,7 @@ public class GenerazioneEquilibrio {
 					}
 					System.out.println("");	
 				
-				}*/
+				}
 		}
 		
 		for (int i=0; i<numElementi;i++) {
@@ -152,8 +165,8 @@ public class GenerazioneEquilibrio {
 				
 		return GenerazioneEquilibrio.stampaMatrice(interazioni, numElementi, numVita);
 		
-					
-		}
+		*/			
+	}
 		
 		public static int calcolaRiga(int riga[][] , int pos) {
 			int somma=0;

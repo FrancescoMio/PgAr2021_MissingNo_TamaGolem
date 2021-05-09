@@ -39,4 +39,9 @@ public class TamaGolem {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "TamaGolem [pietreIngurgitate=" + pietreIngurgitate + ", vita=" + vita + "]";
+	}
+
 }

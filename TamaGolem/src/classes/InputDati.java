@@ -9,6 +9,8 @@ public class InputDati
 	  private final static String ERRORE_STRINGA_VUOTA= "Attenzione: non hai inserito alcun carattere";
 	  private final static String ERRORE_MASSIMO= "Attenzione: e' richiesto un valore minore o uguale a ";
 	  private final static String MESSAGGIO_AMMISSIBILI= "Attenzione: i caratteri ammissibili sono: ";
+	  private final static String REINSERIMENTO= "Attenzione: non hai inserito un valore ammissibile, reinserisci: ";
+	  
 
 	  private final static char RISPOSTA_SI='S';
 	  private final static char RISPOSTA_NO='N';
@@ -44,6 +46,38 @@ public class InputDati
 	   
 	   return lettura;
 	  }
+	  
+	  public static String leggiSringaNonVuotaSenzaNumeri(String messaggio) {
+		  boolean finito=false;
+		   String lettura = null;
+		   do
+		   {
+			 lettura = leggiStringa(messaggio);
+			 lettura = lettura.trim();
+			 if (lettura.length() > 0) {
+				 if(!isNumeric(lettura))
+					 finito=true;
+				 else
+					 System.out.println(ERRORE_FORMATO);
+			 }
+			 else
+			  System.out.println(ERRORE_STRINGA_VUOTA);
+		   } while (!finito);
+		   
+		   return lettura;
+	  }
+	  
+	  public static boolean isNumeric(String strNum) {
+		    if (strNum == null) {
+		        return false;
+		    }
+		    try {
+		        double d = Double.parseDouble(strNum);
+		    } catch (NumberFormatException nfe) {
+		        return false;
+		    }
+		    return true;
+		}
 	  
 	  public static char leggiChar (String messaggio)
 	  {
@@ -102,6 +136,21 @@ public class InputDati
 	      }
 	    } while (!finito);
 	   return valoreLetto;
+	  }
+	  
+	  public static int leggiInteroCompreso(String messaggio, int minimo, int massimo){
+		  boolean finito = false;
+		   int valoreLetto = 0;
+		   do
+		    {
+		     valoreLetto = leggiIntero(messaggio);
+		     if (valoreLetto >= minimo && valoreLetto <= massimo)
+		      finito = true;
+		     else
+		      System.out.println(REINSERIMENTO);
+		    } while (!finito);
+		     
+		   return valoreLetto;
 	  }
 
 	  public static int leggiInteroPositivo(String messaggio)
