@@ -21,8 +21,10 @@ public class InputOutputGiocatore {
 	public static final String INSERIMENTO_PIETRE = "SELEZIONA IL NUMERO DELLA PIETRA CHE VUOI DARE AL TUO TAMAGOLEM: ";
 	public static final String RICHIEDI_N = "INSERISCI IL NUMERO DI ELEMENTI DELL'EQUILIBRIO (compreso tra 3 e 10): ";
 	public static final String SACCA_VUOTA = "LE PIETRE DI QUESTO ELEMENTO SONO ESAURITE! INSERISCI UN ALTRO VALORE !";
-	public static final String GOLEM_EVOCATO = "DEVI DARE DA MANGIARE AL TAMAGOLEM CHE HAI EVOCATO!";
+	public static final String GOLEM_EVOCATO_CASA = "GIOCATORE CASA -> DEVI DARE DA MANGIARE AL TAMAGOLEM CHE HAI EVOCATO!";
+	public static final String GOLEM_EVOCATO_OSPITE = "GIOCATORE OSPITE -> DEVI DARE DA MANGIARE AL TAMAGOLEM CHE HAI EVOCATO!";
 	public static final String NUMERO_GOLEM = "%nSTAI DANDO DA MANGIARE AL TAMAGOLEM NUMERO %d";
+	public static final String VITA_MASSIMA_TAMAGOLEM = "INSERISCI LA VITA MASSIMA DEI TAMAGOLEM: ";
 	public static final int MIN_N = 3;
 	public static final int MAX_N = 10;
 	
@@ -31,18 +33,18 @@ public class InputOutputGiocatore {
 	 * @param saccaComune  contenitore di tutte le pietre che memorizza il loro numero per ogni genere
 	 * @return le pietre da dare al tamagolem
 	 */
-	public static ArrayList<Pietra> selezionaPietre (Map<String, Integer> saccaComune, String giocatore, int numeroTamagolem) {
+	public static ArrayList<Pietra> selezionaPietre (Map<String, Integer> saccaComune, String giocatore) {
 		ArrayList<Pietra> pietre = new ArrayList<>();
-		stampaSaccaComune(saccaComune);
-		if(giocatore.equalsIgnoreCase(Scontro.GIOCATORE_CASA) && numeroTamagolem != -1)
+		//stampaSaccaComune(saccaComune);
+		if(giocatore.equalsIgnoreCase(Scontro.GIOCATORE_CASA) )
 			System.out.println("- - - - - - - - - - - - - - - - - - -"+String.format(GOLEM_CASA, Scontro.getG(), Scontro.getP()));
-		if(giocatore.equalsIgnoreCase(Scontro.GIOCATORE_OSPITE) && numeroTamagolem != -1)
+		else if(giocatore.equalsIgnoreCase(Scontro.GIOCATORE_OSPITE) )
 			System.out.println("- - - - - - - - - - - - - - - - - - -"+String.format(GOLEM_OSPITE, Scontro.getG(), Scontro.getP()));
-		if(numeroTamagolem == -1)
-			System.out.println("- - - - - - - - - - - - - - - - - - - %n " + GOLEM_EVOCATO);
-		else {
-			System.out.println(String.format(NUMERO_GOLEM, numeroTamagolem));
-		}
+		else if(giocatore.equalsIgnoreCase(Scontro.GIOCATORE_CASA_EVOCATO))
+			System.out.println(GOLEM_EVOCATO_CASA);
+		else
+			System.out.println(GOLEM_EVOCATO_OSPITE);
+		
 		for(int i = 0; i < Scontro.getP(); i++) {
 			stampaSaccaComune(saccaComune);
 			int scelta = 0;
@@ -147,6 +149,11 @@ public class InputOutputGiocatore {
 		int s = (a + n - 1) / n;
 		s = s * n;
 		return s;
+	}
+	
+	public static int richiediVitaTamagolem() {
+		int v = InputDati.leggiInteroPositivo(VITA_MASSIMA_TAMAGOLEM);
+		return v;
 	}
 	
 	/**

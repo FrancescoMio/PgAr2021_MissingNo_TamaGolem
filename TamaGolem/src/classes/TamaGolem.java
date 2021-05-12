@@ -11,13 +11,11 @@ import java.util.ArrayList;
  */
 public class TamaGolem {
 	
-	public final static int VITA_MASSIMA = 20;
-	
 	private ArrayList<Pietra> pietreIngurgitate;
 	private int vita;
 	
-	public TamaGolem() {
-		this.vita = VITA_MASSIMA;
+	public TamaGolem(int vitaMassima) {
+		this.vita = vitaMassima;
 		this.pietreIngurgitate = new ArrayList<>();
 	}
 	
@@ -32,8 +30,6 @@ public class TamaGolem {
 	public int getVita() {
 		return vita;
 	}
-	
-	
 	
 	public ArrayList<Pietra> getPietreIngurgitate() {
 		return pietreIngurgitate;

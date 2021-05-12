@@ -18,7 +18,7 @@ public class Pietra {
 	private HashMap<String, Integer> danni;
 	
 	public Pietra(String nome) {
-		this.nome = nome.toUpperCase();
+		this.nome = nome;
 		danni = new HashMap<>();
 	}
 	
@@ -49,7 +49,7 @@ public class Pietra {
 	}
 	
 	public int getDanno(String nomePietra) {
-		System.out.println(danni.get(nomePietra));
+		//System.out.println(danni.get(nomePietra));
 		return danni.get(nomePietra);
 	}
 
