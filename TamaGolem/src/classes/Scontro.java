@@ -17,8 +17,8 @@ public class Scontro {
 	
 	public final static String TAMAGOLEM_CASA_SCHIERATO = "TAMAGOLEM CASA ----- > SCHIERATO ";
 	public final static String TAMAGOLEM_OSPITE_SCHIERATO = "TAMAGOLEM OSPITE ----- > SCHIERATO";
-	public final static String TAMAGOLEM_OSPITE_MORTO = "- - - IL TAMAGOLEM OSPITE E' MORTO! - - - ";
-	public final static String TAMAGOLEM_CASA_MORTO = "- - - IL TAMAGOLEM CASA E' MORTO! - - - ";
+	public final static String TAMAGOLEM_OSPITE_MORTO = "- - - IL TAMAGOLEM OSPITE È MORTO! - - - ";
+	public final static String TAMAGOLEM_CASA_MORTO = "- - - IL TAMAGOLEM CASA È MORTO! - - - ";
 	public final static String GIOCATORE_CASA_VINCE = "------ %s HA VINTO LA PARTITA!--------";
 	public final static String GIOCATORE_OSPITE_VINCE = "------ %s HA VINTO LA PARTITA!--------";
 	public final static String DANNI_INFLITTI_A_OSPITE = "<<<<IL TAMAGOLEM DI %s HA SUBITO %d DANNI!>>>>";

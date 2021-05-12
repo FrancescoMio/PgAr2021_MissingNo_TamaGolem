@@ -24,8 +24,9 @@ public class GenerazioneEquilibrio {
 	
 	if (numVitaTemp*3<numElementi) {
 		//System.out.println("sto barando");
-		interazioni=GenerazioneEquilibrio.bara(interazioni, numElementi, numVitaTemp);
-		return interazioni;
+		interazioni=bara(interazioni, numElementi, numVitaTemp);
+		
+		return shuffler(interazioni, numElementi);
 	}
 	//Crea matrice iniziale 3x3
 	int randomTemp=-1;
@@ -70,7 +71,8 @@ public class GenerazioneEquilibrio {
 		
 		
 	}
-	return interazioni;
+	
+	return shuffler(interazioni, numElementi);
 
 
 	}
@@ -82,6 +84,37 @@ public class GenerazioneEquilibrio {
 				check=true;
 		}
 		return check;
+	}
+	
+	public static int[][] shuffler(int interazioni[][], int numElementi){
+		//Metodo necessario per randomizzare ulteriormente le cose
+		int shuffles=(int) Math.floor(Math.random()*(numElementi));
+		for (int i=0; i<shuffles;i++) {
+			//Scelgo due righe casuali non uguali
+			int randomRiga=(int) Math.floor(Math.random()*(numElementi));
+			int randomRigaDue=(int) Math.floor(Math.random()*(numElementi));
+			while (randomRigaDue==randomRiga) {
+				randomRigaDue=(int) Math.floor(Math.random()*(numElementi));
+			}
+			//randomRiga diventa randomRigaDue e viceversa
+			int temp;
+			int tempDue;
+			for (int j=0; j<numElementi; j++) {
+				temp=interazioni[randomRiga][j];
+				tempDue=interazioni[randomRigaDue][j];
+				interazioni[randomRiga][j]=tempDue;
+				interazioni[randomRigaDue][j]=temp;
+				
+			}
+			//Scambio i valori in tutte le righe
+			for (int j=0; j<numElementi; j++) {
+				temp=interazioni[j][randomRiga];
+				tempDue=interazioni[j][randomRigaDue];
+				interazioni[j][randomRiga]=tempDue;
+				interazioni[j][randomRigaDue]=temp;
+			}
+		}
+		return interazioni;
 	}
 	
 	
