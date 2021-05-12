@@ -23,6 +23,16 @@ public class Giocatore {
 		this.tamaGolem = tamaGolem;
 	}
 	
+	public void removeTamaGolem(int i) {
+		tamaGolem.remove(i);
+	}
+	
+	public TamaGolem evocazioneTamagolem() {
+		if(tamaGolem.size() != 0)
+			return tamaGolem.get(0);
+		return null;
+	}
+	
 	public String getNickName() {
 		return nickName;
 	}
@@ -35,11 +45,7 @@ public class Giocatore {
 		return this.tamaGolem;
 	}
 	
-	public TamaGolem evocazioneTamagolem() {
-		if(tamaGolem.size() != 0)
-			return tamaGolem.get(0);
-		return null;
-	}
+	
 
 	@Override
 	public String toString() {

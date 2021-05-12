@@ -131,7 +131,7 @@ public class InputDati
 	      }
 	     catch (InputMismatchException e)
 	      {
-	       System.out.println(ERRORE_FORMATO);
+	       System.err.println(ERRORE_FORMATO);
 	       String daButtare = lettore.next();
 	      }
 	    } while (!finito);
@@ -147,7 +147,7 @@ public class InputDati
 		     if (valoreLetto >= minimo && valoreLetto <= massimo)
 		      finito = true;
 		     else
-		      System.out.println(REINSERIMENTO);
+		      System.err.println(REINSERIMENTO);
 		    } while (!finito);
 		     
 		   return valoreLetto;

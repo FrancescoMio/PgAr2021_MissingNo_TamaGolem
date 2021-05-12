@@ -15,6 +15,16 @@ import java.util.Map.Entry;
  */
 public class Scontro {
 	
+	public final static String TAMAGOLEM_CASA_SCHIERATO = "TAMAGOLEM CASA ----- > SCHIERATO ";
+	public final static String TAMAGOLEM_OSPITE_SCHIERATO = "TAMAGOLEM OSPITE ----- > SCHIERATO";
+	public final static String TAMAGOLEM_OSPITE_MORTO = "- - - IL TAMAGOLEM OSPITE E' MORTO! - - - ";
+	public final static String TAMAGOLEM_CASA_MORTO = "- - - IL TAMAGOLEM CASA E' MORTO! - - - ";
+	public final static String GIOCATORE_CASA_VINCE = "------ %s HA VINTO LA PARTITA!--------";
+	public final static String GIOCATORE_OSPITE_VINCE = "------ %s HA VINTO LA PARTITA!--------";
+	public final static String DANNI_INFLITTI_A_OSPITE = "<<<<IL TAMAGOLEM DI %s HA SUBITO %d DANNI!>>>>";
+	public final static String DANNI_INFLITTI_A_CASA = "<<<<IL TAMAGOLEM DI %s HA SUBITO %d DANNI!>>>>";
+	public final static String NUOVA_PARTITA = "|---- > VUOI GIOCARE UN'ALTRA PARTITA?  Y/N";
+	public final static String FINE_PARTITA = "------------------&n GRAZIE PER AVER GIOCATO!%n----------------";
 	
 	public final static String GIOCATORE_CASA = "casa";
 	public final static String GIOCATORE_OSPITE = "ospite";
@@ -25,6 +35,7 @@ public class Scontro {
 	private TamaGolem tamaGolemCasa;
 	private TamaGolem tamaGolemOspite;
 	private Giocatore vincitore;
+	private static int [][] equilibrioPartita;
 	private static Map<String, Integer> saccaComune;
 	private static int N;
 	private static int P;
@@ -43,19 +54,69 @@ public class Scontro {
 		this.P  = InputOutputGiocatore.calcolaP(N);
 		this.G = InputOutputGiocatore.calcolaG(N, P);
 		this.S = InputOutputGiocatore.calcolaS(N, G, P);
+		equilibrioPartita = GenerazioneEquilibrio.gen(N, TamaGolem.VITA_MASSIMA);
 		Pietra.setNomiElementi(randomNumbers(), N);
 		this.giocatoreCasa = InputOutputGiocatore.creaGiocatore(GIOCATORE_CASA);
 		this.giocatoreOspite  = InputOutputGiocatore.creaGiocatore(GIOCATORE_OSPITE);
 		saccaComune = new HashMap<>();
 		setSaccaComune();
 		setNomiElementi(saccaComune);
-		/*for(int i = 0; i < N; i++)
-			System.out.print(Pietra.getNOMI_ELEMENTI(i) + " ");
-		System.out.println(saccaComune);*/
 		this.giocatoreCasa.addTamagolem(creaTamaGolem(GIOCATORE_CASA));
 		this.giocatoreOspite.addTamagolem(creaTamaGolem(GIOCATORE_OSPITE));
 		tamaGolemCasa = giocatoreCasa.getTamaGolem().get(0);
 		tamaGolemOspite = giocatoreOspite.getTamaGolem().get(0);
+		battaglia();
+	}
+	
+	public void battaglia() {
+		System.out.println(TAMAGOLEM_CASA_SCHIERATO);
+		System.out.println(TAMAGOLEM_OSPITE_SCHIERATO);
+		boolean scontroFinito = false;
+		int contaPietreUtilizzate = 0;
+		int tamaGolemOspiteMorto = 0;
+		int tamaGolemCasaMorto = 0;
+		while(!scontroFinito) {
+			if(contaPietreUtilizzate == P)
+				contaPietreUtilizzate = 0;
+			Pietra pietraCasa = tamaGolemCasa.getPietreIngurgitate().get(contaPietreUtilizzate);
+			Pietra pietraOspite = tamaGolemOspite.getPietreIngurgitate().get(contaPietreUtilizzate);
+			String nomePietraCasa = pietraCasa.getNome();
+			String nomePietraOspite = pietraOspite.getNome();
+			int dannoPietraCasa = pietraCasa.getDanno(nomePietraOspite);
+			int dannoPietraOspite = pietraOspite.getDanno(nomePietraCasa);
+			int vitaPrimaCasa = tamaGolemCasa.getVita();
+			int vitaPrimaOspite = tamaGolemOspite.getVita();
+			tamaGolemOspite.setVita(dannoPietraCasa);
+			tamaGolemCasa.setVita(dannoPietraOspite);
+			if(tamaGolemOspite.getVita() <= 0) {
+				System.out.println(TAMAGOLEM_OSPITE_MORTO);
+				giocatoreOspite.removeTamaGolem(tamaGolemOspiteMorto);
+				if(!evocazioneTamaGolem(GIOCATORE_OSPITE)) {
+					scontroFinito = true;
+					System.out.println(String.format(GIOCATORE_CASA_VINCE, giocatoreCasa.getNickName()));
+					//QUA CI ANDRà IL METODO CHE STAMPA L'EQUILIBRIO
+				}	
+			}
+			if(tamaGolemCasa.getVita() <= 0) {
+				System.out.println(TAMAGOLEM_CASA_MORTO);
+				giocatoreCasa.removeTamaGolem(tamaGolemCasaMorto);
+				if(!evocazioneTamaGolem(GIOCATORE_CASA)) {
+					scontroFinito = true;
+					System.out.println(String.format(GIOCATORE_OSPITE_VINCE, giocatoreOspite.getNickName()));
+					//QUA CI ANDRà IL METODO CHE STAMPA L'EQUILIBRIO
+				}	
+			}
+			if(tamaGolemOspite.getVita() < vitaPrimaOspite)
+				System.out.println(String.format(DANNI_INFLITTI_A_OSPITE, giocatoreOspite.getNickName(),vitaPrimaOspite-tamaGolemOspite.getVita()));
+			if(tamaGolemCasa.getVita() < vitaPrimaCasa)
+				System.out.println(String.format(DANNI_INFLITTI_A_CASA, giocatoreCasa.getNickName(),vitaPrimaCasa-tamaGolemCasa.getVita()));
+			contaPietreUtilizzate++;
+		}
+		String scelta = InputDati.leggiStringaNonVuota(NUOVA_PARTITA);
+		if(scelta.equalsIgnoreCase("Y"))
+			nuovaPartita();
+		else
+			System.out.println(FINE_PARTITA);
 	}
 	
 	/**
@@ -67,7 +128,7 @@ public class Scontro {
 		if(tipoGiocatore.equalsIgnoreCase(GIOCATORE_CASA)) {
 			if(giocatoreCasa.evocazioneTamagolem() != null) {
 				tamaGolemCasa = giocatoreCasa.evocazioneTamagolem();
-				tamaGolemCasa.addPietreIngurgitate(InputOutputGiocatore.selezionaPietre(saccaComune,tipoGiocatore));
+				tamaGolemCasa.addPietreIngurgitate(InputOutputGiocatore.selezionaPietre(saccaComune,tipoGiocatore,-1));
 				return true;
 			}
 			else {
@@ -78,7 +139,7 @@ public class Scontro {
 		else {
 			if(giocatoreOspite.evocazioneTamagolem() != null) {
 				tamaGolemOspite = giocatoreOspite.evocazioneTamagolem();
-				tamaGolemOspite.addPietreIngurgitate(InputOutputGiocatore.selezionaPietre(saccaComune,tipoGiocatore));
+				tamaGolemOspite.addPietreIngurgitate(InputOutputGiocatore.selezionaPietre(saccaComune,tipoGiocatore,-1));
 				return true;
 			}
 			else {
@@ -88,6 +149,14 @@ public class Scontro {
 		}
 	}
 	
+	public static int[][] getEquilibrioPartita() {
+		return equilibrioPartita;
+	}
+
+	public static void setEquilibrioPartita(int[][] equilibrioPartita) {
+		Scontro.equilibrioPartita = equilibrioPartita;
+	}
+
 	public static ArrayList<Integer> randomNumbers() {
 		ArrayList<Integer> numbers = new ArrayList<>();
 		Random generatore = new Random();
@@ -140,7 +209,7 @@ public class Scontro {
 		if(giocatore.equalsIgnoreCase(GIOCATORE_CASA)) {
 			for(int i = 0; i < Scontro.G; i++) {
 				TamaGolem tamaGolemCasa = new TamaGolem();
-				tamaGolemCasa.addPietreIngurgitate(InputOutputGiocatore.selezionaPietre(saccaComune,GIOCATORE_CASA));
+				tamaGolemCasa.addPietreIngurgitate(InputOutputGiocatore.selezionaPietre(saccaComune,GIOCATORE_CASA,i+1));
 				tama.add(tamaGolemCasa);
 			}
 			return tama;
@@ -148,7 +217,7 @@ public class Scontro {
 		else {
 			for(int i = 0; i < Scontro.G; i++) {
 				TamaGolem tamaGolemOspite = new TamaGolem();
-				tamaGolemOspite.addPietreIngurgitate(InputOutputGiocatore.selezionaPietre(saccaComune,GIOCATORE_OSPITE));
+				tamaGolemOspite.addPietreIngurgitate(InputOutputGiocatore.selezionaPietre(saccaComune,GIOCATORE_OSPITE,i+1));
 				tama.add(tamaGolemOspite);
 			}
 			return tama;

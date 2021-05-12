@@ -47,6 +47,27 @@ public class Pietra {
 	public static String[] getNOMI_ELEMENTI() {
 		return NOMI_ELEMENTI;
 	}
+	
+	public int getDanno(String nomePietra) {
+		System.out.println(danni.get(nomePietra));
+		return danni.get(nomePietra);
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public HashMap<String, Integer> getDanni() {
+		return danni;
+	}
+
+	public void setDanni(HashMap<String, Integer> danni) {
+		this.danni = danni;
+	}
 
 	@Override
 	public String toString() {

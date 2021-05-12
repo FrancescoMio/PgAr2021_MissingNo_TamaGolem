@@ -33,6 +33,16 @@ public class TamaGolem {
 		return vita;
 	}
 	
+	
+	
+	public ArrayList<Pietra> getPietreIngurgitate() {
+		return pietreIngurgitate;
+	}
+
+	public void setPietreIngurgitate(ArrayList<Pietra> pietreIngurgitate) {
+		this.pietreIngurgitate = pietreIngurgitate;
+	}
+
 	public boolean ancoraVivo() {
 		if(vita <= 0)
 			return false;
