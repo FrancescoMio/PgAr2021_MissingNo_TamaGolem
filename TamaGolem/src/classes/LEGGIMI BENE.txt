@@ -1,0 +1,5 @@
+LEGGIMI BENE
+
+GenEquilibrio non è la classe che genera l'equilibrio (quella sarebbe GenerazioneEquilibrio)
+
+Leggere il contenuto di GenEquilibrio per ulteriori informazioni.
