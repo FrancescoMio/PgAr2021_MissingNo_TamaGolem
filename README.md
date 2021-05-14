@@ -6,4 +6,4 @@ Con interfaccia intuitiva, e algoritmo di generazione molto creativo, privo di a
 
 Se alcune cose non tornano, è perchè vi siete spiegati male (ovviamente).
   
-~Giovanni Ballini
+~Giovanni Ballini (autore del reamde e grande cazzaro)
