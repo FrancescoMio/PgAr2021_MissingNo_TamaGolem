@@ -2,12 +2,26 @@ package classes;
 
 import java.util.ArrayList;
 
+/*
+LEGGIMI ATTENTAMENTE PRIMA
+
+ho finito di fare questa classe alle 23:36, e non ho avuto tempo di commentare tutto
+
+onestamente sono stanco
+
+Se sono necessarie spiegazioni, contattatemi su Telegram (sono Giovanni Ballini)
+
+Magari domani faccio un video su youtube
+
+Grazie per l'attenzione
+
+*/
 
 public class GenerazioneEquilibrio {
 	
-	public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA E':";
+public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA E':";
 	
-	public static int[][] gen(int numElementi, int numVita){
+	public static int[][] gen(int numElementi){
 	//System.out.println("programma iniziato");
 	//inizializzazione Matrice
 	int [][] interazioni = new int[numElementi][numElementi];
@@ -17,16 +31,11 @@ public class GenerazioneEquilibrio {
 		}
 	}
 	
-	//Creazione matrice 3x3
-	int numVitaTemp=(int) Math.floor(Math.random()*(numVita)+1);
-	
-	//Bara se la vita*3<numElementi
+	//Scelta random Vita
+	int numVitaTemp=(int) Math.floor(Math.random()*(10)+1);
 	
 	if (numVitaTemp*3<numElementi) {
-		//System.out.println("sto barando");
-		interazioni=bara(interazioni, numElementi, numVitaTemp);
-		
-		return shuffler(interazioni, numElementi);
+		numVitaTemp=(int) Math.floor(Math.random()*(10)+1);
 	}
 	//Crea matrice iniziale 3x3
 	int randomTemp=-1;
@@ -41,20 +50,18 @@ public class GenerazioneEquilibrio {
 		randomTemp=random;
 	}
 
-	
-	
 	//Costruzione del resto della matrice
 	for (int i=3; i<numElementi; i++) {
 		int riga=(int) Math.floor(Math.random()*(i));
-		while(!GenerazioneEquilibrio.rigaValida(interazioni, riga)) {
+		while(!rigaValida(interazioni, riga)) {
 			riga=(int) Math.floor(Math.random()*(i));
 		}
-		//System.out.println("presa riga " + riga);
+	
 		int elementoRiga=(int) Math.floor(Math.random()*(i));
 		while(interazioni[riga][elementoRiga]==0||interazioni[riga][elementoRiga]==1) {
 			elementoRiga=(int) Math.floor(Math.random()*(i));
 		}
-		//System.out.println("preso elemento " + elementoRiga);
+		
 		int primoSplit=(int) Math.floor(Math.random()*(interazioni[riga][elementoRiga]));
 		
 		if (primoSplit==0) {
@@ -66,25 +73,40 @@ public class GenerazioneEquilibrio {
 		interazioni[riga][elementoRiga]=primoSplit;
 		interazioni[riga][i]=secondoSplit;
 		interazioni[i][elementoRiga]=secondoSplit;
-		/*GenEquilibrio.stampaMatrice(interazioni, numElementi, numVita);
-		System.out.println("");*/
+		//stampaMatrice(interazioni, numElementi, numVitaTemp);
+		interazioni=matrixFix(interazioni, i);
 		
 		
 	}
 	
-	return shuffler(interazioni, numElementi);
+	return shuffler (interazioni,numElementi);
 
 
 	}
 	
-	public static boolean rigaValida(int riga[][], int pos) {
-		boolean check = false;
-		for (int i=0; i<riga.length; i++) {
-			if (riga[pos][i]!=1&&riga[pos][i]!=0) 
-				check=true;
+	public static int[][] matrixFix(int interazioni[][], int pos){
+		/*Questo metodo riempie gli spazi (affinchè ogni pietra "interagisca" con un'altra)
+		 * 
+		 * 
+		 */
+		for (int i=0; i<pos; i++) {
+			int random=(int) Math.floor(Math.random()*(10)+1);
+			if (interazioni[pos][i]==0&&interazioni[i][pos]==0) {
+				//System.out.println(pos + " "+ i);
+				ArrayList<Integer> pathing =pathing(interazioni, i, pos, i);
+				//System.out.println(pathing);
+				for (int j=0; j<pathing.size()-1;j++) {
+					interazioni[pathing.get(j)][pathing.get(j+1)]+=random;
+				}
+				/*interazioni[pos][i]+=random;
+				int temp=valoreValido(interazioni,i);
+				interazioni[i][temp]+=random;
+				interazioni[temp][pos]+=random;*/
+			}
 		}
-		return check;
+		return interazioni;
 	}
+	
 	
 	public static int[][] shuffler(int interazioni[][], int numElementi){
 		//Metodo necessario per randomizzare ulteriormente le cose
@@ -118,7 +140,90 @@ public class GenerazioneEquilibrio {
 	}
 	
 	
-	public static int[][] bara(int interazioni[][], int numElementi, int vita){
+	public static boolean rigaValida(int riga[][], int pos) {
+		//Se la riga non contiene 0 e 1 allora è valida
+		boolean check = false;
+		for (int i=0; i<riga.length; i++) {
+			if (riga[pos][i]!=1&&riga[pos][i]!=0) 
+				check=true;
+		}
+		return check;
+	}
+	
+	public static ArrayList<Integer> posizioniValide(int matrice[][], int pos) {
+
+		ArrayList<Integer> posizioni  = new ArrayList<Integer>();
+		for (int i=0; i<matrice.length; i++) {
+			if (matrice[pos][i]!=0) 
+				posizioni.add(i);
+		}
+		return posizioni;
+	}
+	
+	public static ArrayList<Integer> pathing(int matrice[][], int rigaPartenza, int rigaArrivo, int colonnaArrivo){
+		ArrayList<Integer> pathing = new ArrayList<>();
+		ArrayList<Integer> lastI = new ArrayList<>();
+		pathing.add(rigaArrivo);
+		pathing.add(colonnaArrivo);
+		ArrayList<Integer> posizioniValide  = posizioniValide(matrice, rigaPartenza);
+		//System.out.println(posizioniValide);
+		boolean check=false;
+		boolean check2=true;
+		boolean banana=true;
+		int i=0;
+		while(banana) {
+			
+			if (check)
+				i=0;
+			check=false;
+			
+			for (int j=0; j<posizioniValide.size();j++) {
+				if (posizioniValide.get(j)==rigaArrivo) {
+					pathing.add(posizioniValide.get(j));
+					return pathing;
+				}
+			}
+			
+			while(i>(posizioniValide.size())-1) {
+				pathing.remove(pathing.get(pathing.size()-1));
+				//System.out.println("questo è il pathing dopo la rimozione " + pathing);
+				rigaPartenza=pathing.get(pathing.size()-1);
+				i= lastI.get(lastI.size()-1)+1;
+				lastI.remove(lastI.size()-1);
+				posizioniValide  = posizioniValide(matrice, rigaPartenza);
+			}
+			
+			
+			if(rigaPartenza!=posizioniValide.get(i)) {
+				for (int k=0; k<pathing.size();k++) {
+					if (pathing.get(k)==posizioniValide.get(i))
+							check2=false;
+				}
+				if (check2) {
+				lastI.add(i);
+				//System.out.println("questa è la riga partenza 1 :"+posizioniValide.get(i));
+				//System.out.println("questa è la riga partenza 2 :"+ rigaPartenza);
+				pathing.add(posizioniValide.get(i));
+				//System.out.println("questo è il pathing " + pathing);
+				
+				rigaPartenza=posizioniValide.get(i);
+				posizioniValide  = posizioniValide(matrice, rigaPartenza);
+				//System.out.println("posizioni valide " +posizioniValide);
+				check=true;
+				}
+			}
+			
+			check2=true;
+			i++;
+			
+			}
+		//System.out.println("non dovrebbe succedere");
+		return pathing;
+			
+		}
+		
+	
+	/*public static int[][] bara(int interazioni[][], int numElementi, int vita){
 		
 		for (int i=0; i<numElementi;i++) {
 			if (i==(numElementi-1)) 
@@ -127,7 +232,7 @@ public class GenerazioneEquilibrio {
 				interazioni[i][i+1]=vita;
 		}
 		return interazioni;
-	}
+	}*/
 	
 	public static void stampaMatrice(int [][] mat, int n) {
 		System.out.println(RIVELAZIONE_EQUILIBRIO);
@@ -138,7 +243,6 @@ public class GenerazioneEquilibrio {
 			System.out.println("");
 		}
 	}
-	
 	
 /*	public static void stampaMatrice(int interazioni[][],int numElementi,int numVita) {
 		System.out.println("");

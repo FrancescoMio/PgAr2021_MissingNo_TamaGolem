@@ -151,10 +151,7 @@ public class InputOutputGiocatore {
 		return s;
 	}
 	
-	public static int richiediVitaTamagolem() {
-		int v = InputDati.leggiInteroPositivo(VITA_MASSIMA_TAMAGOLEM);
-		return v;
-	}
+	
 	
 	/**
 	 * Metodo per creare un giocatore con un proprio nickName richiesto tramite input all'utente

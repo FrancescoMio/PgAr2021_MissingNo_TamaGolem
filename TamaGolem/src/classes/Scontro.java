@@ -44,7 +44,7 @@ public class Scontro {
 	private static int P;
 	private static int S;
 	private static int G;
-	private static int vitaMassimaTamagolem;
+	private static int vitaMassimaTamagolem=0;
 	
 	/**
 	 * Costruttore della classe Scontro, implementa la costruzione degli oggetti giocatoreCasa/Ospite e i rispettivi tamaGolem
@@ -60,8 +60,16 @@ public class Scontro {
 		this.S = InputOutputGiocatore.calcolaS(N, G, P);
 		this.giocatoreCasa = InputOutputGiocatore.creaGiocatore(GIOCATORE_CASA);
 		this.giocatoreOspite  = InputOutputGiocatore.creaGiocatore(GIOCATORE_OSPITE);
-		this.vitaMassimaTamagolem = InputOutputGiocatore.richiediVitaTamagolem();
-		equilibrioPartita = GenerazioneEquilibrio.gen(N, vitaMassimaTamagolem);
+		equilibrioPartita = GenerazioneEquilibrio.gen(N);
+		for (int i=0; i<this.N;i++) {
+			for (int j=0; j<this.N;j++) {
+				if (equilibrioPartita[i][j]>this.vitaMassimaTamagolem){
+					this.vitaMassimaTamagolem=equilibrioPartita[i][j];
+				}
+			}
+		}
+		System.out.println("");
+		System.out.println("QUESTA È LA VITA DEI TAMAGOLEM " + this.vitaMassimaTamagolem);
 		Pietra.setNomiElementi(randomNumbers(), N);
 		saccaComune = new HashMap<>();
 		setSaccaComune();
