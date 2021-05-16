@@ -2,27 +2,12 @@ package classes;
 
 import java.util.ArrayList;
 
-/*
-LEGGIMI ATTENTAMENTE PRIMA
-
-ho finito di fare questa classe alle 23:36, e non ho avuto tempo di commentare tutto
-
-onestamente sono stanco
-
-Se sono necessarie spiegazioni, contattatemi su Telegram (sono Giovanni Ballini)
-
-Magari domani faccio un video su youtube
-
-Grazie per l'attenzione
-
-*/
-
+//Questa è la classe che genera l'equilibrio
 public class GenerazioneEquilibrio {
 	
 public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA E':";
 	
 	public static int[][] gen(int numElementi){
-	//System.out.println("programma iniziato");
 	//inizializzazione Matrice
 	int [][] interazioni = new int[numElementi][numElementi];
 	for (int i=0; i<numElementi; i++) {
@@ -32,10 +17,11 @@ public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA 
 	}
 	
 	//Scelta random Vita
-	int numVitaTemp=(int) Math.floor(Math.random()*(10)+1);
+	//Ho messo come valore di vita massima 10 (più che adatto per matrici 10x10)
+	int numVitaTemp=(int) Math.floor(Math.random()*(10)+1); 
 	
-	if (numVitaTemp*3<numElementi) {
-		numVitaTemp=(int) Math.floor(Math.random()*(10)+1);
+	while (numVitaTemp*3<numElementi) {
+		numVitaTemp=(int) Math.floor(Math.random()*(numElementi)+1);
 	}
 	//Crea matrice iniziale 3x3
 	int randomTemp=-1;
@@ -73,7 +59,6 @@ public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA 
 		interazioni[riga][elementoRiga]=primoSplit;
 		interazioni[riga][i]=secondoSplit;
 		interazioni[i][elementoRiga]=secondoSplit;
-		//stampaMatrice(interazioni, numElementi, numVitaTemp);
 		interazioni=matrixFix(interazioni, i);
 		
 		
@@ -85,23 +70,19 @@ public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA 
 	}
 	
 	public static int[][] matrixFix(int interazioni[][], int pos){
-		/*Questo metodo riempie gli spazi (affinchè ogni pietra "interagisca" con un'altra)
-		 * 
-		 * 
-		 */
+		//Questo metodo riempie gli spazi (affinchè ogni pietra "interagisca" con un'altra)
 		for (int i=0; i<pos; i++) {
 			int random=(int) Math.floor(Math.random()*(10)+1);
+			int random2=(int) Math.floor(Math.random()*(2));
 			if (interazioni[pos][i]==0&&interazioni[i][pos]==0) {
-				//System.out.println(pos + " "+ i);
-				ArrayList<Integer> pathing =pathing(interazioni, i, pos, i);
-				//System.out.println(pathing);
+				ArrayList<Integer> pathing;
+				if (random2==0)
+					pathing =pathing(interazioni, i, pos, i);
+				else
+					pathing =pathing(interazioni, pos, i, pos);
 				for (int j=0; j<pathing.size()-1;j++) {
 					interazioni[pathing.get(j)][pathing.get(j+1)]+=random;
 				}
-				/*interazioni[pos][i]+=random;
-				int temp=valoreValido(interazioni,i);
-				interazioni[i][temp]+=random;
-				interazioni[temp][pos]+=random;*/
 			}
 		}
 		return interazioni;
@@ -151,7 +132,7 @@ public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA 
 	}
 	
 	public static ArrayList<Integer> posizioniValide(int matrice[][], int pos) {
-
+		//Restituisce le posizioni di elementi non nulli data una determinata riga
 		ArrayList<Integer> posizioni  = new ArrayList<Integer>();
 		for (int i=0; i<matrice.length; i++) {
 			if (matrice[pos][i]!=0) 
@@ -161,17 +142,16 @@ public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA 
 	}
 	
 	public static ArrayList<Integer> pathing(int matrice[][], int rigaPartenza, int rigaArrivo, int colonnaArrivo){
+		//Questo metodo si preoccupa di trovare un percorso tra due pietre
 		ArrayList<Integer> pathing = new ArrayList<>();
 		ArrayList<Integer> lastI = new ArrayList<>();
 		pathing.add(rigaArrivo);
 		pathing.add(colonnaArrivo);
 		ArrayList<Integer> posizioniValide  = posizioniValide(matrice, rigaPartenza);
-		//System.out.println(posizioniValide);
 		boolean check=false;
 		boolean check2=true;
-		boolean banana=true;
 		int i=0;
-		while(banana) {
+		while(true) {
 			
 			if (check)
 				i=0;
@@ -186,7 +166,6 @@ public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA 
 			
 			while(i>(posizioniValide.size())-1) {
 				pathing.remove(pathing.get(pathing.size()-1));
-				//System.out.println("questo è il pathing dopo la rimozione " + pathing);
 				rigaPartenza=pathing.get(pathing.size()-1);
 				i= lastI.get(lastI.size()-1)+1;
 				lastI.remove(lastI.size()-1);
@@ -201,14 +180,9 @@ public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA 
 				}
 				if (check2) {
 				lastI.add(i);
-				//System.out.println("questa è la riga partenza 1 :"+posizioniValide.get(i));
-				//System.out.println("questa è la riga partenza 2 :"+ rigaPartenza);
 				pathing.add(posizioniValide.get(i));
-				//System.out.println("questo è il pathing " + pathing);
-				
 				rigaPartenza=posizioniValide.get(i);
 				posizioniValide  = posizioniValide(matrice, rigaPartenza);
-				//System.out.println("posizioni valide " +posizioniValide);
 				check=true;
 				}
 			}
@@ -217,8 +191,6 @@ public static final String RIVELAZIONE_EQUILIBRIO = "L'EQUILIBRIO DELLA PARTITA 
 			i++;
 			
 			}
-		//System.out.println("non dovrebbe succedere");
-		return pathing;
 			
 		}
 		
